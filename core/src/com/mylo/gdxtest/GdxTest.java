@@ -21,12 +21,12 @@ public class GdxTest extends ApplicationAdapter {
 		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1,
+		1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1,
 		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 		1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 		1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -34,6 +34,8 @@ public class GdxTest extends ApplicationAdapter {
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	};
 	int wallsHeight = 16, wallsWidth = 16, wallSize = 58;
+
+	float renderDistance = 1000;
 
 	static final int FOV = 500;
 	static final int FOVJUMP = 1;
@@ -122,7 +124,7 @@ public class GdxTest extends ApplicationAdapter {
 	public void RenderPlayer() {
 		for (float i = 0; i < FOV; i+=FOVJUMP){
 			float castYaw = i - FOV/2 + yaw;
-			rayCastResult cast = RayCast(new Vector2(playerX, playerY), castYaw, 1000);
+			rayCastResult cast = RayCast(new Vector2(playerX, playerY), castYaw, renderDistance);
 
 			//drawRayResult(cast);
 			Render3d(cast, i/(double)FOV, 1/(double)(FOV+FOVJUMP), Math.abs(i - (FOV/2)));
@@ -197,9 +199,9 @@ public class GdxTest extends ApplicationAdapter {
 			if (hitWallY > 0){
 				return new rayCastResult(hitWallY, origin, new Vector2(hitX, hitY), false);
 			}
-			//if (new Vector2(hitX, hitY).len() > maxLenght){
-			//	return new rayCastResult();
-			//}
+			if (new Vector2(hitX, hitY).sub(origin).len() > maxLenght){
+				return new rayCastResult();
+			}
 		}
 	}
 
